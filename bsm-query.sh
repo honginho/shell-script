@@ -2,6 +2,7 @@
 # Program:
 #       This program is to query Boshiamy (Chinese input method) code.
 # History:
+# 2020/09/04	Honginho Chang	Update layouts: increase tab length
 # 2020/09/04	Honginho Chang	Handle the support char (V)
 # 2020/08/07	Honginho Chang	First release
 
@@ -22,6 +23,7 @@ COLOUR_HEAD="\e[0;35m"
 COLOUR_TEXT="\e[0;33m"
 COLOUR_CHECK="\e[0;36m"
 COLOUR_SPECIAL="\e[0;31m"
+TAB_LENGTH=17
 
 curl=$(which curl)
 outputfile="_bsm_webpage_$(date | shasum | awk '{print substr($0, 1, 8);}').txt"
@@ -85,9 +87,9 @@ for ((i=1; i<=${#result[@]}-1; i++)); do # ${#result[@]}: length of result array
 			has_support_char=1
 		else
 			if [ $has_support_char -eq 0 ]; then
-				printf "$COLOUR_TEXT%s\t" $j
+				printf "$COLOUR_TEXT%s\t" $j | expand -t $TAB_LENGTH
 			elif [ $has_support_char -eq 1 ]; then
-				printf "$COLOUR_SPECIAL%s\t" $j
+				printf "$COLOUR_SPECIAL%s\t" $j | expand -t $TAB_LENGTH
 				has_support_char=0
 			fi
 		fi
