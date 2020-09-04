@@ -2,6 +2,7 @@
 # Program:
 #       This program is to query Boshiamy (Chinese input method) code.
 # History:
+# 2020/09/04	Honginho Chang	Handle the support char (V)
 # 2020/08/07	Honginho Chang	First release
 
 
@@ -9,7 +10,7 @@
 ### Check if syntax correct ###################
 ###############################################
 if [ $# -ne 1 ]; then
-	echo "Usage: ./$(basename $0) KEYWORD"
+	echo "Usage: $(basename $0) KEYWORD"
 	exit -1
 fi
 
@@ -20,6 +21,7 @@ fi
 COLOUR_HEAD="\e[0;35m"
 COLOUR_TEXT="\e[0;33m"
 COLOUR_CHECK="\e[0;36m"
+COLOUR_SPECIAL="\e[0;31m"
 
 curl=$(which curl)
 outputfile="_bsm_webpage_$(date | shasum | awk '{print substr($0, 1, 8);}').txt"
@@ -77,8 +79,18 @@ for ((i=1; i<=${#result[@]}-1; i++)); do # ${#result[@]}: length of result array
 
 	# show final results with colours
 	printf "$COLOUR_HEAD%s\t" ${category[$i]}
+	has_support_char=0
 	for j in "${result_without_dirt[@]}"; do
-		printf "$COLOUR_TEXT%s\t" $j
+		if [[ $j == *"<hr>"* ]]; then
+			has_support_char=1
+		else
+			if [ $has_support_char -eq 0 ]; then
+				printf "$COLOUR_TEXT%s\t" $j
+			elif [ $has_support_char -eq 1 ]; then
+				printf "$COLOUR_SPECIAL%s\t" $j
+				has_support_char=0
+			fi
+		fi
 	done
 	echo "" # breakline
 done
