@@ -2,6 +2,7 @@
 # Program:
 #       This program is to query Boshiamy (Chinese input method) code.
 # History:
+# 2020/09/06	Honginho Chang	Delete tmp file right after content got
 # 2020/09/04	Honginho Chang	Update layouts: increase tab length
 # 2020/09/04	Honginho Chang	Handle the support char (V)
 # 2020/08/07	Honginho Chang	First release
@@ -52,7 +53,13 @@ result=($(grep "<tbody>" $outputfile | awk -F'<tbody>|<\/tbody>' '{print $2}' | 
 	# for i in "${result[@]}"; do
 	# 	printf "$COLOUR_CHECK%s" $i
 	# 	echo ""
-	# done
+	# doneoutputfile
+
+
+################################################
+### Delete tmp file created by $curl command ###
+################################################
+rm $outputfile
 
 
 ################################################
@@ -96,12 +103,6 @@ for ((i=1; i<=${#result[@]}-1; i++)); do # ${#result[@]}: length of result array
 	done
 	echo "" # breakline
 done
-
-
-################################################
-### Delete tmp file created by $curl command ###
-################################################
-rm $outputfile
 
 
 ################################################
