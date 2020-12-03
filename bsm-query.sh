@@ -2,6 +2,7 @@
 # Program:
 #       This program is to query Boshiamy (Chinese input method) code.
 # History:
+# 2020/12/03	Honginho Chang	Prevent `awk` warning: escape sequence `\/' treated as plain `/'
 # 2020/09/06	Honginho Chang	Delete tmp file right after content got
 # 2020/09/04	Honginho Chang	Update layouts: increase tab length
 # 2020/09/04	Honginho Chang	Handle the support char (V)
@@ -48,7 +49,7 @@ $curl -s -o $outputfile $url
 ################################################
 ### Get input method code result (with html) ###
 ################################################
-result=($(grep "<tbody>" $outputfile | awk -F'<tbody>|<\/tbody>' '{print $2}' | sed 's/<td[^>]*>/<td>/g' | sed 's/<span[^>]*>/<span>/g' | sed 's/ //g' | awk -F'<td>|<\/td>' '{for (i=1; i<=NF; i++) { print $i "\n" } }'))
+result=($(grep "<tbody>" $outputfile | awk -F'<tbody>|<\\/tbody>' '{print $2}' | sed 's/<td[^>]*>/<td>/g' | sed 's/<span[^>]*>/<span>/g' | sed 's/ //g' | awk -F'<td>|<\\/td>' '{for (i=1; i<=NF; i++) { print $i "\n" } }'))
 ## check "$result" content
 	# for i in "${result[@]}"; do
 	# 	printf "$COLOUR_CHECK%s" $i
@@ -73,7 +74,7 @@ result=("${result[@]::${#result[@]}-1}")
 # show searched results
 for ((i=1; i<=${#result[@]}-1; i++)); do # ${#result[@]}: length of result array
 	# get input method code result of each mode
-	each_result=($(echo "${result[$i]}" | awk -F'<ul>|<\/ul>' '{print $2}' | awk -F'<li>|<\/li>' '{for (i=1; i<=NF; i++) { print $i } }'))
+	each_result=($(echo "${result[$i]}" | awk -F'<ul>|<\\/ul>' '{print $2}' | awk -F'<li>|<\\/li>' '{for (i=1; i<=NF; i++) { print $i } }'))
 	## check "$each_result" content
 		# for k in "${each_result[@]}"; do
 		# 	printf "$COLOUR_CHECK%s" $k
