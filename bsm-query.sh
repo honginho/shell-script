@@ -30,7 +30,7 @@ TAB_LENGTH=17
 curl=$(which curl)
 outputfile="_bsm_webpage_$(date | shasum | awk '{print substr($0, 1, 8);}').txt"
 keyword=$1
-url="http://boshiamy.com/liuquery.php?q=$keyword&f=1"
+url="https://boshiamy.com/liuquery.php?q=$keyword&f=1"
 category=('' '繁體中文模式' '簡體中文模式' '打繁出簡模式' '日文模式') # category of type mode
 
 
